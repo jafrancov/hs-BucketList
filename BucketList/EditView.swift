@@ -23,10 +23,10 @@ struct EditView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Place Name", text: $placemark.wrappedTitle)
-                    TextField("Description", text: $placemark.wrappedSubtitle)
+                    TextField("Nombre del lugar", text: $placemark.wrappedTitle)
+                    TextField("Descripción", text: $placemark.wrappedSubtitle)
                 }
-                Section(header: Text("nearby")) {
+                Section(header: Text("Lugares cercanos")) {
                     if loadingState == .loaded {
                         List (pages, id: \.pageid) { page in
                             Text(page.title)
@@ -59,18 +59,16 @@ struct EditView: View {
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
-                // we got some data back!
                 let decoder = JSONDecoder()
 
                 if let items = try? decoder.decode(Result.self, from: data) {
-                    // success – convert the array values to our pages array
                     self.pages = Array(items.query.pages.values).sorted()
                     self.loadingState = .loaded
                     return
                 }
             }
 
-            // if we're still here it means the request failed somehow
+            // Si continuas aquí, probablemente la solicitud falló en algún punto
             self.loadingState = .failed
         }.resume()
     }
